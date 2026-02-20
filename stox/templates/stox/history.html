@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="flex gap-8">
+
+    <div class="w-1/4">
+
+        <div class="bg-white p-6 rounded-2xl shadow mb-6">
+            <h3 class="text-lg font-bold mb-4">Statistics</h3>
+
+            <p class="text-sm text-gray-500">Lowest Price</p>
+            <p class="text-2xl font-bold text-green-600 mb-4">
+                {{ min_price }}
+            </p>
+
+            <p class="text-sm text-gray-500">Highest Price</p>
+            <p class="text-2xl font-bold text-red-600">
+                {{ max_price }}
+            </p>
+        </div>
+
+        
+        <div class="bg-white p-6 rounded-2xl shadow">
+            <h3 class="text-lg font-bold mb-4">Filter by Size</h3>
+
+            <form method="get">
+                <select name="size" class="w-full border rounded p-2 mb-4">
+                    <option value="">All Sizes</option>
+                    {% for s in sizes %}
+                        <option value="{{ s }}"
+                            {% if s == selected_size %}selected{% endif %}>
+                            {{ s }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                <input type="hidden" name="sort" value="{{ sort }}">
+                <button class="w-full bg-blue-500 text-white p-2 rounded">
+                    Apply
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    
+    <div class="w-3/4">
+
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold">Price History</h2>
+
+           
+            <a href="?sort={% if sort == 'asc' %}desc{% else %}asc{% endif %}{% if selected_size %}&size={{ selected_size }}{% endif %}"
+               class="bg-gray-200 px-4 py-2 rounded hover:bg-gray-300">
+                Sort {% if sort == 'asc' %}↓{% else %}↑{% endif %}
+            </a>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="p-4 text-left">Date</th>
+                        <th class="p-4">Size</th>
+                        <th class="p-4">Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in prices %}
+                    <tr class="border-t hover:bg-gray-50
+                        {% if item.price == min_price %} bg-green-50 {% endif %}
+                        {% if item.price == max_price %} bg-red-50 {% endif %}
+                    ">
+                        <td class="p-4">{{ item.created_at }}</td>
+                        <td class="p-4 text-center">{{ item.size }}</td>
+
+                        <td class="p-4 text-center font-semibold
+                            {% if item.price == min_price %} text-green-600 {% endif %}
+                            {% if item.price == max_price %} text-red-600 {% endif %}
+                        ">
+                            {{ item.price }}
+                        </td>
+
+                        <td class="p-4 text-right">
+                            <a href="{% url 'stockx-price-delete' item.pk %}"
+                               class="text-red-500 hover:underline">
+                               Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

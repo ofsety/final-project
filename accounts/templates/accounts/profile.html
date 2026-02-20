@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="max-w-5xl mx-auto mt-10">
+
+    <div class="bg-white rounded-2xl shadow-lg p-8">
+
+        <h2 class="text-3xl font-bold mb-10">Profile Dashboard</h2>
+
+        <div class="grid grid-cols-3 gap-8">
+
+            
+            <div class="col-span-1 bg-gray-50 p-6 rounded-2xl">
+                <div class="w-20 h-20 bg-blue-200 rounded-full flex items-center justify-center text-2xl font-bold mb-6">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <p class="text-gray-500 text-sm">Username</p>
+                <p class="text-lg font-semibold mb-4">
+                    {{ request.user.username }}
+                </p>
+
+                <p class="text-gray-500 text-sm">Email</p>
+                <p class="text-lg font-semibold">
+                    {{ request.user.email|default:"Not provided" }}
+                </p>
+            </div>
+
+            
+            <div class="col-span-1 bg-gray-50 p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-6">Statistics</h3>
+
+                <p class="text-gray-500 text-sm">Total Requests</p>
+                <p class="text-3xl font-bold text-blue-600 mb-6">
+                    {{ total_requests }}
+                </p>
+
+                <p class="text-gray-500 text-sm">Region</p>
+                <p class="text-lg font-semibold">
+                    {{ profile.region|default:"Not set" }}
+                </p>
+            </div>
+
+            
+            <div class="col-span-1 bg-gray-50 p-6 rounded-2xl">
+                <h3 class="text-lg font-bold mb-6">Telegram Integration</h3>
+
+                <p class="text-gray-500 text-sm mb-2">
+                    Your Personal Token:
+                </p>
+
+                <div class="bg-white p-3 rounded-lg border text-sm break-all mb-4">
+                    {{ profile.telegram_token }}
+                </div>
+
+                <p class="text-xs text-gray-500">
+                    Send this token to the Telegram bot to link your account.
+                </p>
+            </div>
+
+        </div>
+
+        
+        <div class="mt-10 flex gap-4">
+            <a href="{% url 'profile-edit' %}"
+               class="bg-blue-500 text-white px-6 py-2 rounded-xl hover:bg-blue-600">
+               Edit Profile
+            </a>
+
+            <a href="{% url 'logout' %}"
+               class="bg-red-500 text-white px-6 py-2 rounded-xl hover:bg-red-600">
+               Logout
+            </a>
+
+            <a href="{% url 'profile-delete' %}"
+               class="bg-red-500 text-white px-6 py-2 rounded-xl hover:bg-red-600">
+               Delete Profile
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
